@@ -11,6 +11,7 @@ class App extends React.Component {
         start: {x: 0, y: 0}
         }
         this.buildMaze = this.buildMaze.bind(this);
+        this.handleHead = this.handleHead.bind(this);
         console.log(this.state);
     }
     buildMaze()   {
@@ -26,22 +27,29 @@ class App extends React.Component {
                 if ( n > 0 ) {
                     let coordP = getCoordinates(order[n - 1]);
                     let nodeP = newNodes[coordP.y][coordP.x];
+                    nodeP = this.handleHead(nodeP, false);
                     let { borderN, borderP } = removeBorders(order[n-1], order[n], nodeP, nodeN);
-                    if ( borderN && borderP ) {
-                        nodeN = {...nodeN, borders: borderN };
-                        newNodes[coordP.y][coordP.x] = {...nodeP, borders: borderP };
-                    }
+                    nodeN = {...nodeN, borders: borderN };
+                    newNodes[coordP.y][coordP.x] = {...nodeP, borders: borderP };;
                 }
                 let newNode = {
                     ...nodeN,
                     visited: true
                 };
+                newNode = this.handleHead(newNode, true);
                 newNodes[coordinates.y][coordinates.x] = newNode;
                 this.setState({
                     nodes: newNodes
                 });
-            }, 50 * n);
+            }, 25 * n);
         }
+    }
+    handleHead(head, bool)    {
+        let newHead = {
+            ...head,
+            head: bool
+        }
+        return newHead;
     }
     render() {
         const {nodes, start} = this.state;

@@ -7,6 +7,7 @@ export const Node = ({ data }) => {
     const { visited, border } = data;
     if ( data.visited ) extraClass += " visited";
     extraClass += getBorders(border);
+    if ( data.head ) extraClass += " head";
     return (
         <div className={"node" + extraClass}>
 

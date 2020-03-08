@@ -90,6 +90,7 @@ export function getBorders(arr)  {
     let extraClass = "";
     for ( let i in arr) {
         if ( arr[i] ) extraClass += ` ${borders[i]}`
+        else extraClass += ` N${borders[i]}`
     }
     return extraClass;
 }
@@ -102,9 +103,9 @@ export function removeBorders(prev, now, nodeP, nodeN) {
     let diff = {x: xN - xP, y: yN - yP};
     // console.log({xP, yP}, {xN, yN});
     // console.log(diff);
-    if ( Math.sqrt(diff.x**2 + diff.y**2) != 1 ) return {borderP: null, borderN: null};
     let borderP = nodeP.border;
     let borderN = nodeN.border;
+    if ( Math.sqrt(diff.x**2 + diff.y**2) != 1 ) return {borderP, borderN};
     let {x, y} = diff;
     if ( x == 1 )   {
         borderP[1] = 0;
