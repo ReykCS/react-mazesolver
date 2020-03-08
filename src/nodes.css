@@ -1,0 +1,31 @@
+.node {
+    /* height: 54px; */
+    flex: 1;
+    padding: 0px;
+    margin: 0px;
+    border-left: 0px solid #000;
+    transition: all 0.3s;
+    -webkit-box-shadow: inset -4px -6px 11px -8px rgba(54,54,54,1);
+    -moz-box-shadow: inset -4px -6px 11px -8px rgba(54,54,54,1);
+    box-shadow: inset -2px -2px 10px -8px rgba(54,54,54,1);
+}
+
+.visited {
+    background: #e8e8e8;
+}
+
+.top {
+    border-top: 1px solid #484848;
+}
+
+.left {
+    border-left: 1px solid #484848;
+}
+
+.right {
+    border-right: 1px solid #484848;
+}
+
+.bottom {
+    border-bottom: 1px solid #484848;
+}

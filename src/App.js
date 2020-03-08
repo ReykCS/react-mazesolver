@@ -1,26 +1,68 @@
 import React from 'react';
-import logo from './logo.svg';
 import './App.css';
+import { createNodes, Constants, createMaze, getCoordinates, removeBorders } from './assets';
+import {Node} from './Node';
 
-function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
+class App extends React.Component {
+    constructor(props)  {
+        super(props);
+        this.state = {
+        nodes: createNodes(Constants.dim.x, Constants.dim.y),
+        start: {x: 0, y: 0}
+        }
+        this.buildMaze = this.buildMaze.bind(this);
+        console.log(this.state);
+    }
+    buildMaze()   {
+        const {nodes, start} = this.state;
+
+        const {parent, order} = createMaze(start, nodes);
+        for ( let n in order )   {
+            setTimeout(() => {
+                let newNodes = this.state.nodes.slice();
+                let coordinates = getCoordinates(order[n]);
+                console.log(coordinates);
+                let nodeN = newNodes[coordinates.y][coordinates.x];
+                if ( n > 0 ) {
+                    let coordP = getCoordinates(order[n - 1]);
+                    let nodeP = newNodes[coordP.y][coordP.x];
+                    let { borderN, borderP } = removeBorders(order[n-1], order[n], nodeP, nodeN);
+                    if ( borderN && borderP ) {
+                        nodeN = {...nodeN, borders: borderN };
+                        newNodes[coordP.y][coordP.x] = {...nodeP, borders: borderP };
+                    }
+                }
+                let newNode = {
+                    ...nodeN,
+                    visited: true
+                };
+                newNodes[coordinates.y][coordinates.x] = newNode;
+                this.setState({
+                    nodes: newNodes
+                });
+            }, 50 * n);
+        }
+    }
+    render() {
+        const {nodes, start} = this.state;
+        return (
+        <div className="App">
+            <div className="grid-holder">
+                {nodes.map((nodes, y) => {
+                    
+                    return (
+                        <div key={y} className="row">
+                            {nodes.map((elem, x) => {
+                                return <Node key={x} data={elem} />}
+                            )}
+                        </div>)
+                    })
+                }
+            </div>
+            <button onClick={this.buildMaze}>Create Maze</button>
+        </div>
+        );
+    }
 }
 
 export default App;
